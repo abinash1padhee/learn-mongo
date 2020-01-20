@@ -1,0 +1,70 @@
+Mongo DB Notes:
+--------------------
+ Key Features:
+ 	-- BSON Data Structure
+	-- No Schema
+	-- Documents can be of different structures in the same collection.
+
+Mongo Ecosystem:
+	-- Self Managed
+	-- Atlas Cloud
+	-- Mobile
+	-- Compass
+	-- BI connectors
+	-- Mongo Charts
+Mongo Serverless:
+	-- Stitch
+	-- Serverless Query API
+	-- Serverless functions
+	-- DB triggers
+
+Commands:
+Check Mongo: mongo
+Start Mongo: mongod --dbpath "/Users/abinashpadhee/data/db"
+sudo mongod --dbpath "/Users/abinashpadhee/data/db"
+change port: mongod --port 27018
+mongo --port 27017
+
+Hands On:
+	-- show dbs
+	-- use shop // to switch to db 
+	-- db.products.insertOne({name:"AspectJ Book", price:"15.99"})
+	-- db.products.find()
+	-- db.products.find().pretty()
+	-- To use manual ID
+	db.flightData.insertOne({departureAirport: "DEL", arrivalAirport:"CAL", distance: 1500, _id:"BBS_DVR"})
+	-- To update One
+	db.flightData.updateOne({departureAirport: "MUC"},{$set: {marker:"delete"}})
+	-- To update many
+	db.flightData.updateMany({},{$set: {marker:"todelete"}})
+	-- To delete many
+	db.flightData.deleteMany({marker: "todelete"})
+	-- To find using filters
+	
+	db.flightData.find({intercontinental: true}).pretty()
+	db.flightData.find({distance: 10000}).pretty()
+	> db.flightData.find({distance: {$gt:10000}}).pretty()
+	db.flightData.findOne({distance: {$gt:800}})
+	
+	-- To update using Update
+	db.flightData.update({_id:ObjectId("5e23fcfc7e087657578ecb20")},{$set: {delayed:true}})
+	// Overwrite existing data as below
+	db.flightData.update({_id:ObjectId("5e23fcfc7e087657578ecb20")},{delayed:true})
+	-- To replace One
+	
+	-- Projection:
+	db.passengers.find({}, {name: 1}).pretty()
+	db.passengers.find({}, {name: 1, _id: 0}).pretty()
+	
+	-- Embedded Documents
+	db.flights.updateMany({}, {$set: {status: {description: "delayed", lastUpdated: "1 hr ago"}}})
+	-- Arrays inside documents
+	db.flights.updateOne({departureAirport: "MUC"}, {$set: {discountCards: ["Axis","ICICI"]}})
+	-- Query arrays
+	db.flights.findOne({departureAirport: "MUC"}).discountCards
+	db.flights.find({discountCards:"Axis"}).pretty()
+	-- Query nested data
+	db.flights.find({"status.description" : "delayed"}).pretty()
+	
+	
+	
