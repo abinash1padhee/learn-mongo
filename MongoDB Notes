@@ -66,5 +66,48 @@ Hands On:
 	-- Query nested data
 	db.flights.find({"status.description" : "delayed"}).pretty()
 	
+Hands On Schemas/Structures:
+
+	-- Diff schemas possible in the same collection
+		db.products.insertOne({name: "R D Sharma", price: 12.99})
+		db.products.insertOne({title:"T Shirt", seller: {name: "Ravi", age: 27}})
+		
+		db.products.insertOne({name: "A Laptop", price: 260.99, details: {cpu: "i7 9th gen"}})
 	
+		Delete All
+		db.products.deleteMany({})
+		
+	-- Drop database and collection
+		db.dropDatabase()
+		db.companies.drop() // Returns TRUE
+		
+	-- DATA TYPE Example
+		db.companies.insertOne({ name: "Apple Inc.", isStartup: true, employees: 33, funding: 12345678901234567890, details: {ceo: "Spencer"}, tags: 		[{title:"super"}, {title: "perfect"}], foundingDate: new Date(), insertedAt: new Timestamp()})
+		
+	-- DB Stats
+		db.stats()
+		
+	-- NumberInt function
+		db.numbers.insertOne({a: NumberInt(1)})
+		
+		typeof db.numbers.findOne().a
+		
+MongoDB Relations:
+	-- One to One
+		db.patients.insertOne({name: "Max", age: 27, disSummary: "dis-sum-max-1"})
+		db.disSummaries.insertOne({_id: "dis-sum-max-1", diseases: ["cold", "fever"]})
+		
+	-- One to Many
+		db.qThreads.insertOne({creator: "Max", qstn: "How it works?", answers: [{text: "Just like that"}, {text: "Cool"}]})
+		
+		db.city.insertOne({name: "Hyderabad", country: "India"});
+		db.citizens.insertMany([{name: "Tom", cityId: "<ObjectId of the city>"}, ...])
+		
+	-- Many to Many
+		db.products.insertOne({name:"AspectJ Book", price:"15.99"})
+		db.customers.insertOne({name: "Max", age: 27})
+		db.customers.updateOne({_id: ObjectId("5e2db1d4648e8ebb1f50a13f")}, {$set: {orders:[{productId: ObjectId("5e2db1a0648e8ebb1f50a13e"), quantity: 2}]}})
+		
+		
+		
 	
