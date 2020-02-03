@@ -1,31 +1,37 @@
-Mongo DB Notes:
+# Mongo DB Notes:
 --------------------
  Key Features:
+ 
  	-- BSON Data Structure
 	-- No Schema
 	-- Documents can be of different structures in the same collection.
 
 Mongo Ecosystem:
+
 	-- Self Managed
 	-- Atlas Cloud
 	-- Mobile
 	-- Compass
 	-- BI connectors
 	-- Mongo Charts
+	
 Mongo Serverless:
+
 	-- Stitch
 	-- Serverless Query API
 	-- Serverless functions
 	-- DB triggers
 
 Commands:
-Check Mongo: mongo
-Start Mongo: mongod --dbpath "/Users/abinashpadhee/data/db"
-sudo mongod --dbpath "/Users/abinashpadhee/data/db"
-change port: mongod --port 27018
-mongo --port 27017
+
+    -- Check Mongo: mongo
+    -- Start Mongo: mongod --dbpath "/Users/abinashpadhee/data/db"
+                    sudo mongod --dbpath "/Users/abinashpadhee/data/db"
+    -- Change port: mongod --port 27018
+                    mongo --port 27017
 
 Hands On:
+
 	-- show dbs
 	-- use shop // to switch to db 
 	-- db.products.insertOne({name:"AspectJ Book", price:"15.99"})
@@ -43,7 +49,7 @@ Hands On:
 	
 	db.flightData.find({intercontinental: true}).pretty()
 	db.flightData.find({distance: 10000}).pretty()
-	> db.flightData.find({distance: {$gt:10000}}).pretty()
+	db.flightData.find({distance: {$gt:10000}}).pretty()
 	db.flightData.findOne({distance: {$gt:800}})
 	
 	-- To update using Update
@@ -93,6 +99,7 @@ Hands On Schemas/Structures:
 		typeof db.numbers.findOne().a
 		
 MongoDB Relations:
+
 	-- One to One
 		db.patients.insertOne({name: "Max", age: 27, disSummary: "dis-sum-max-1"})
 		db.disSummaries.insertOne({_id: "dis-sum-max-1", diseases: ["cold", "fever"]})
@@ -108,6 +115,42 @@ MongoDB Relations:
 		db.customers.insertOne({name: "Max", age: 27})
 		db.customers.updateOne({_id: ObjectId("5e2db1d4648e8ebb1f50a13f")}, {$set: {orders:[{productId: ObjectId("5e2db1a0648e8ebb1f50a13e"), quantity: 2}]}})
 		
+		// insert many
+		db.authors.insertMany([{name: "Max", age: 28, address: {street: "Corner ST"}}, {name: "Jon", age: 29, address: {street: "Baker St"}}])
+		
+	-- Aggregation and Lookup
+		db.books.aggregate([{$lookup: {from: "authors", localField: "authors", foreignField: "_id", as: "creators"}}])
+		
+	-- Blog Example
+		db.users.insertMany([{name: "Tanu", age: 28, email: "tanu@test.com"}, {name: "Manu", age: 29, email: "manu@test.com"}])
+		
+		db.posts.insertOne({title: "1st Test Post", text: "Hey how r u ?", tags: ["new", "trending"], creator: ObjectId("5e36604e702e436b8f399d5e"), comments: [{text: "Hey I am fine", author: ObjectId("5e36604e702e436b8f399d5f")}]})
 		
 		
-	
+		
+MongoDB Shell Options:
+
+    -- mongod --dbpath "/Users/abinashpadhee/data/db" --logpath "/Users/abinashpadhee/Development/MongoDB/logs/log.log"
+    
+    Run as a background service
+    -- mongod --fork --logpath "/Users/abinashpadhee/Development/MongoDB/logs/log.log"
+    -- use admin
+    -- db.shutdownServer()
+    
+    Using a config file
+    -- mongod -f /Users/abinashpadhee/Development/MongoDB/mongodb-macos-x86_64-4.2.2/bin/mongod.cfg
+    
+MongoDB Create Operations:
+
+    -- db.hobbies.insertMany([{_id: "driving", name: "driving"}, {_id: "cooking", name: "cooking"}, {_id: "sleeping", name: "sleeping" }])
+    
+    Unordered Inserts
+    -- db.hobbies.insertMany([{_id: "driving", name: "driving"}, {_id: "cooking", name: "cooking"}, {_id: "sleeping", name: "sleeping" }], {ordered: false})
+    
+    Write Concern
+    -- db.persons.insertOne({name: "Rancho", age: 36}, {writeConcern: {w: 1}})
+    -- db.persons.insertOne({name: "Ian", age: 33}, {writeConcern: {w: 1, j: true}})
+    
+    Importing Data
+    -- mongoimport /Users/abinashpadhee/Development/MongoDB/learn-mongo/tv-shows.json -d movieData -c movies --jsonArray --drop
+    
