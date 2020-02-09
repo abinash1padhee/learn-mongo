@@ -153,6 +153,57 @@ MongoDB Create Operations:
     
     Importing Data
     -- mongoimport /Users/abinashpadhee/Development/MongoDB/learn-mongo/tv-shows.json -d movieData -c movies --jsonArray --drop
+
+MongoDB Read Operations:
+
+    -- db.movies.find({runtime: {$lt:60}}).pretty()
     
+    Embedded Documents
+    -- db.movies.find({"rating.average": {$gt:8}}).pretty()
     
+    Arrays
+     -- db.movies.find({"genres": "Drama"}).pretty()
+     -- db.movies.find({"genres": ["Drama"]}).pretty()
+     
+    In and Nin
+    -- db.movies.find({"runtime": {$in: [40, 50]}}).pretty()
+    -- db.movies.find({"runtime": {$in: [40, 50]}}).pretty()
+    
+    Or and Nor
+    -- db.movies.find({$or: [{"rating.average": {$lt:5}}, {"rating.average": {$gt:9}}]}).count()
+    
+    And
+    -- db.movies.find({$and: [{genres: "Drama"}, {"rating.average": {$gt:9}}]}).count()
+    
+    Element Operators
+    -- db.movies.find({age: {$exists: true}}).pretty()
+    -- db.movies.find({age: {$exists: true, $gt: 30}}).pretty()
+    -- db.movies.find({age: {$exists: true, $ne: null}}).pretty()
+    
+    Type Operator
+    -- db.movies.find({age: {$type: number}}).pretty()
+    
+    Regex Operator
+    -- Not very performance efficient
+    -- db.movies.find({summary: {$regex: /musical/}}).pretty()
+    
+    Expr operator
+    -- db.monthlyBudget.find( { $expr: { $gt: [ "$spent" , "$budget" ] } } )
+    
+    Querying Arrays
+    -- db.users.find({"hobbies.title": "Sports"}).pretty()
+    -- db.users.find( { hobbies: { $size: 2 } } );
+    -- db.inventory.find( { tags: { $all: [ "appliance", "school", "book" ] } } )
+    
+    The following query matches only those documents where the results array contains at least one element that is both 
+    greater than or equal to 80 and is less than 85.
+    -- db.scores.find(
+          { results: { $elemMatch: { $gte: 80, $lt: 85 } } }
+       )
+    -- db.survey.find(
+          { results: { $elemMatch: { product: "xyz", score: { $gte: 8 } } } }
+       )
+       
+    Applying Cursors
+    -- 
     
