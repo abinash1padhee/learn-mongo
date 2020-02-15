@@ -207,3 +207,25 @@ MongoDB Read Operations:
     Applying Cursors
     -- 
     
+Update Operations
+
+    -- db.users.find({"hobbies.title": "Sports"}).pretty()
+    -- db.users.updateMany({"hobbies.title": "Sports"}, {$set: {isSporty: true}})
+    -- db.users.updateOne({name: "Manuel"}, {$inc: {age: 3}})
+    -- db.users.updateMany({},{$rename: {"age": "totalAge"}})
+    
+    Upsert Operation
+    -- db.users.updateOne({name: "Maria"}, {$set:{age: 32, hobbies: [{title: "Cooking", frequency: 3}, {title: "Reading", frequency: 5}], phone: 1234567890}}, {upsert: true})
+    
+    Update Arrays
+    -- db.users.updateMany({hobbies: {$elemMatch: {title: "Sports", frequency: {$gte: 3}}}}, {$set: {"hobbies.$.highFrequency": true}})
+    -- db.users.updateMany({totalAge: {$gt: 30}}, {$inc: {"hobbies.$[].frequency": -1}})
+    -- db.users.updateMany({"hobbies.frequency": {$gt: 2}}, {$set: {"hobbies.$[el].goodFrequency": true}}, {arrayFilters: [{"el.frequency": {$gt: 2}}]})
+    
+MongoDB Indexes
+
+    -- 
+    
+Geospatial Data
+
+    -- 
