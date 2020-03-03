@@ -228,4 +228,58 @@ MongoDB Indexes
     
 Geospatial Data
 
-    -- 
+    -- db.places.insertOne({name: "California Academy", location: {type: "Point", coordinates: [-122.4682834, 37.7698646]}})
+    -- db.collection.createIndex( { <location field> : "2dsphere" } )
+    -- db.places.find(
+          {
+            location:
+              { $near:
+                 {
+                   $geometry: { type: "Point",  coordinates: [ -73.9667, 40.78 ] },
+                   $minDistance: 1000,
+                   $maxDistance: 5000
+                 }
+              }
+          }
+       )
+    -- db.places.find(
+          {
+            loc: {
+              $geoIntersects: {
+                 $geometry: {
+                    type : "Polygon",
+                    coordinates: [
+                      [
+                        [ -100, 60 ], [ -100, 0 ], [ -100, -60 ], [ 100, -60 ], [ 100, 60 ], [ -100, 60 ]
+                      ]
+                    ],
+                    crs: {
+                       type: "name",
+                       properties: { name: "urn:x-mongodb:crs:strictwinding:EPSG:4326" }
+                    }
+                 }
+              }
+            }
+          }
+       )
+    -- db.places.find( {
+         loc: { $geoWithin: { $centerSphere: [ [ -88, 30 ], 10/3963.2 ] } }
+       } )
+    
+Aggregation Framework
+
+    -- db.persons.aggregate([ {$match: {gender: "female"}} ]).pretty()
+    -- db.persons.aggregate([
+           { $match: { gender: 'female' } },
+           { $group: { _id: { state: "$location.state" }, totalPersons: { $sum: 1 } } }
+       ]).pretty();
+    -- db.persons.aggregate([
+           { $match: { gender: 'female' } },
+           { $group: { _id: { state: "$location.state" }, totalPersons: { $sum: 1 } } },
+           { $sort: { totalPersons: -1 } }
+       ]).pretty();
+    -- db.persons.aggregate([
+           { $match: { "dob.age": {$gt: 50} } },
+           { $group: { _id: { gender: "$gender" }, numPersons: { $sum: 1 }, avgAge: { $avg: "$dob.age"} } },
+           { $sort: { numPersons: -1 } }
+       ]).pretty();
